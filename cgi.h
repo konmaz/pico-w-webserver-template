@@ -2,12 +2,12 @@
 #include "pico/cyw43_arch.h"
 #include "pin_number.h"
 
-// CGI handler which is run when a request for /led.cgi is detected
-const char * cgi_led_handler(int iIndex, int iNumParams, char *pcParam[], char *pcValue[])
+// CGI handler which is run when a request for /power_button.cgi is detected
+const char * cgi_power_button_handler(int iIndex, int iNumParams, char *pcParam[], char *pcValue[])
 {
-    // Check if an request for LED has been made (/led.cgi?led=x)
-    if (strcmp(pcParam[0] , "led") == 0){
-        // Look at the argument to check if LED is to be turned on (x=1) or off (x=0)
+    // Check if an request for a power button pulse has been made
+    if (strcmp(pcParam[0] , "duration") == 0){
+        // Look at the argument to check the duration of the pulse (0=100ms) and (1=3500ms)
         if(strcmp(pcValue[0], "0") == 0){
             cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
             
@@ -33,16 +33,16 @@ const char * cgi_led_handler(int iIndex, int iNumParams, char *pcParam[], char *
         
     }
     
-    // Send the index page back to the user
-    return "/index.shtml";
+    // Send an ok page as a reply
+    return "/ok.shtml";
 }
 
 // tCGI Struct
 // Fill this with all of the CGI requests and their respective handlers
 static const tCGI cgi_handlers[] = {
     {
-        // Html request for "/led.cgi" triggers cgi_handler
-        "/led.cgi", cgi_led_handler
+        // Html request for "/powerbutton.cgi" triggers cgi_handler
+        "/power_button.cgi", cgi_power_button_handler
     },
 };
 
