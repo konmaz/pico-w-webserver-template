@@ -3,25 +3,19 @@
 #include "hardware/adc.h"
 
 // SSI tags - tag length limited to 8 bytes by default
-const char * ssi_tags[] = {"volt","temp","led"};
+const char * ssi_tags[] = {"temp","led"};
 
 u16_t ssi_handler(int iIndex, char *pcInsert, int iInsertLen) {
   size_t printed;
   switch (iIndex) {
-  case 0: // volt
-    {
-      const float voltage = adc_read() * 3.3f / (1 << 12);
-      printed = snprintf(pcInsert, iInsertLen, "%f", voltage);
-    }
-    break;
-  case 1: // temp
+  case 0: // temp
     {
     const float voltage = adc_read() * 3.3f / (1 << 12);
     const float tempC = 27.0f - (voltage - 0.706f) / 0.001721f;
-    printed = snprintf(pcInsert, iInsertLen, "%f", tempC);
+    printed = snprintf(pcInsert, iInsertLen, "%.2f", tempC);
     }
     break;
-  case 2: // led
+  case 1: // led
     {
       bool led_status = cyw43_arch_gpio_get(CYW43_WL_GPIO_LED_PIN);
       if(led_status == true){
