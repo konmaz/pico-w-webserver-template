@@ -3,7 +3,7 @@
 #include "hardware/adc.h"
 
 // SSI tags - tag length limited to 8 bytes by default
-const char * ssi_tags[] = {"temp","led"};
+const char * ssi_tags[] = {"temp","timeup"};
 
 u16_t ssi_handler(int iIndex, char *pcInsert, int iInsertLen) {
   size_t printed;
@@ -15,15 +15,20 @@ u16_t ssi_handler(int iIndex, char *pcInsert, int iInsertLen) {
     printed = snprintf(pcInsert, iInsertLen, "%.2f", tempC);
     }
     break;
-  case 1: // led
+  case 1: // timeup
     {
-      bool led_status = cyw43_arch_gpio_get(CYW43_WL_GPIO_LED_PIN);
-      if(led_status == true){
-        printed = snprintf(pcInsert, iInsertLen, "ON");
-      }
-      else{
-        printed = snprintf(pcInsert, iInsertLen, "OFF");
-      }
+        uint32_t uptime_micros = time_us_32();
+        
+        // Convert microseconds to seconds
+        uint32_t uptime_seconds = uptime_micros / 1000000;
+        
+        // Calculate hours, minutes, and remaining seconds
+        uint32_t uptime_hours = uptime_seconds / 3600;
+        uint32_t uptime_minutes = (uptime_seconds % 3600) / 60;
+        uint32_t remaining_seconds = uptime_seconds % 60;
+
+
+      printed = snprintf(pcInsert, iInsertLen, "%lu:%02lu:%02lu", uptime_hours, uptime_minutes, remaining_seconds);
     }
     break;
   default:
