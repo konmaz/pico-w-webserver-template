@@ -1,1 +1,1 @@
-# pico-w-webserver-template
+# Pico W Webserver to wake a computer remotely sending a short pulse on the motherboard power on button
