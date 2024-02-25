@@ -13,7 +13,7 @@ const char * cgi_power_button_handler(int iIndex, int iNumParams, char *pcParam[
             
             // Set pin low
             gpio_put(PIN_NUMBER, 0);
-            sleep_ms(100);
+            busy_wait_ms(100);
             // Set pin high
             gpio_put(PIN_NUMBER, 1);
 
@@ -24,7 +24,7 @@ const char * cgi_power_button_handler(int iIndex, int iNumParams, char *pcParam[
             
             // Set pin low
             gpio_put(PIN_NUMBER, 0);
-            sleep_ms(3500);
+            busy_wait_ms(3500);
             // Set pin high
             gpio_put(PIN_NUMBER, 1);
 
